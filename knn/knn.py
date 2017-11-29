@@ -15,6 +15,7 @@ Given a set of pre-classified data, this algorithm
 
 from random import randint
 import math
+import matplotlib.pyplot as plt
 
 #Reads in article using each word as input
 def readData(path):
@@ -44,8 +45,18 @@ def classify():
             else:
                 dataset.append([x[i],y[i],'B'])
 #show dataset cleanly w/ classifications
-    # for line in dataset:
-    #     print line
+    for line in dataset:
+        if line[2] == 'A':
+            plt.scatter(line[0], line[1], color = 'blue')
+        else:
+            plt.scatter(line[0], line[1], color = 'red')
+
+    plt.xlabel("x-axis")
+    plt.ylabel("y-axis")
+    plt.title("K-NN Input Data")
+    #shows only input data graph
+    # plt.show()
+
     return dataset
 
 
@@ -118,14 +129,35 @@ def classify_point(lowest_points):
     else:
         return 'B'
 
+def plot_points(points):
+    for point in points:
+        if point[2] == 'A':
+            plt.scatter(point[0], point[1], color = 'blue', alpha = .2)
+        else:
+            plt.scatter(point[0], point[1], color = 'red', alpha = .2)
+
+
+    plt.xlabel("x-axis")
+    plt.ylabel("y-axis")
+    plt.title("K-NN Data")
+    plt.show()
+
 
 def main():
     k = 1
+    new_points_array = []
+    num_points = 10
+
     dataset = classify()
-    new_point = generate_data()
-    #k should be an odd value
-    lowest_points = find_knn(dataset, new_point, 5)
-    print lowest_points
-    classify_point(lowest_points)
+    for i in range(num_points):
+        new_point = generate_data()
+        #k should be an odd value
+        lowest_points = find_knn(dataset, new_point, 5)
+        x,y = new_point
+        temp_point = [x,y,classify_point(lowest_points)]
+        print temp_point
+        new_points_array.append(temp_point)
+
+    plot_points(new_points_array)
 
 main()
